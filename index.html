@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحدي الحروف | Word Challenge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0c8f39;
+            --secondary-color: #d4af37;
+            --dark-color: #1a1a2e;
+            --light-color: #f8f9fa;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --info-color: #17a2b8;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #0c8f39 0%, #0a6e2c 100%);
+            color: var(--light-color);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(212, 175, 55, 0.3);
+        }
+        
+        .logo {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 20px;
+        }
+        
+        .game-container {
+            display: none;
+        }
+        
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: var(--border-radius);
+        }
+        
+        .timer {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 8px 20px;
+            border-radius: var(--border-radius);
+            min-width: 120px;
+            text-align: center;
+        }
+        
+        .category-info {
+            text-align: center;
+            flex-grow: 1;
+        }
+        
+        .category-title {
+            font-size: 1.6rem;
+            margin-bottom: 5px;
+            color: var(--secondary-color);
+        }
+        
+        .category-description {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .score {
+            font-size: 1.5rem;
+            font-weight: 600;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            min-width: 120px;
+            text-align: center;
+        }
+        
+        .game-grid {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+        
+        .cell {
+            width: 65px;
+            height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(212, 175, 55, 0.5);
+            border-radius: var(--border-radius);
+            font-size: 2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            user-select: none;
+        }
+        
+        .cell:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+        }
+        
+        .cell.selected {
+            background-color: var(--secondary-color);
+            color: var(--dark-color);
+            border-color: var(--secondary-color);
+            box-shadow: 0 4px 8px rgba(212, 175, 55, 0.4);
+        }
+        
+        .word-display {
+            min-height: 80px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: 8px;
+            text-align: center;
+            color: var(--secondary-color);
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 14px 28px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: var(--dark-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: #e6c445;
+            transform: translateY(-3px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .btn-secondary {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: var(--light-color);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+        }
+        
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .game-options {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .option-group {
+            margin-bottom: 20px;
+        }
+        
+        .option-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .option-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .option-btn {
+            padding: 12px 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--border-radius);
+            color: var(--light-color);
+            cursor: pointer;
+            transition: var(--transition);
+            flex-grow: 1;
+            text-align: center;
+            min-width: 120px;
+        }
+        
+        .option-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .option-btn.active {
+            background-color: var(--secondary-color);
+            color: var(--dark-color);
+            border-color: var(--secondary-color);
+            font-weight: 600;
+        }
+        
+        .start-screen {
+            text-align: center;
+            padding: 30px 20px;
+        }
+        
+        .result-screen {
+            text-align: center;
+            padding: 40px 20px;
+            display: none;
+        }
+        
+        .result-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            color: var(--secondary-color);
+        }
+        
+        .result-title {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+        }
+        
+        .result-message {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .hint-section {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: var(--border-radius);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .hint-text {
+            font-size: 1.1rem;
+        }
+        
+        .hint-btn {
+            padding: 10px 20px;
+            background-color: var(--info-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+        }
+        
+        .hint-btn:hover {
+            background-color: #138496;
+        }
+        
+        .hint-btn.disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        
+        .night-mode {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.3);
+            color: var(--secondary-color);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: var(--transition);
+        }
+        
+        .night-mode:hover {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        @media (max-width: 768px) {
+            .cell {
+                width: 55px;
+                height: 55px;
+                font-size: 1.7rem;
+            }
+            
+            .game-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .timer, .score {
+                min-width: auto;
+                width: 100%;
+                max-width: 200px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .cell {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+            
+            .logo {
+                font-size: 2.2rem;
+            }
+        }
+        
+        /* وضع ليلي رمضاني */
+        body.night-mode-active {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
+        body.night-mode-active .logo {
+            color: #bb86fc;
+        }
+        
+        body.night-mode-active .cell {
+            border-color: rgba(187, 134, 252, 0.5);
+        }
+        
+        body.night-mode-active .cell.selected {
+            background-color: #bb86fc;
+            border-color: #bb86fc;
+            color: #1a1a2e;
+        }
+        
+        body.night-mode-active .btn-primary {
+            background-color: #bb86fc;
+            color: #1a1a2e;
+        }
+        
+        body.night-mode-active .option-btn.active {
+            background-color: #bb86fc;
+            color: #1a1a2e;
+        }
+        
+        body.night-mode-active .category-title,
+        body.night-mode-active .timer,
+        body.night-mode-active .word-display {
+            color: #bb86fc;
+        }
+        
+        /* تأثيرات الفوز والخسارة */
+        .win-effect {
+            animation: winPulse 1.5s infinite;
+        }
+        
+        @keyframes winPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .shake {
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        /* إشعارات */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            z-index: 1000;
+            animation: slideIn 0.3s, fadeOut 0.3s 2.7s;
+            max-width: 300px;
+        }
+        
+        .notification.success {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .notification.error {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .notification.info {
+            background-color: var(--info-color);
+            color: white;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        /* شاشة التحميل */
+        .loader {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .loader.active {
+            display: flex;
+        }
+        
+        .spinner {
+            width: 70px;
+            height: 70px;
+            border: 6px solid rgba(255, 255, 255, 0.3);
+            border-top: 6px solid var(--secondary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- زر الوضع الليلي -->
+    <button class="night-mode" id="nightModeBtn">
+        <i class="fas fa-moon"></i>
+    </button>
+    
+    <!-- شاشة التحميل -->
+    <div class="loader" id="loader">
+        <div class="spinner"></div>
+        <div>جاري تحميل اللعبة...</div>
+    </div>
+    
+    <div class="container">
+        <!-- شاشة البداية -->
+        <header class="start-screen" id="startScreen">
+            <h1 class="logo">تحدي الحروف</h1>
+            <p class="tagline">لعبة التفاعل والتحدي مع الأصدقاء والعائلة - مثالية لرمضان</p>
+            
+            <div class="game-options">
+                <div class="option-group">
+                    <h3 class="option-title"><i class="fas fa-th-large"></i> حجم الشبكة</h3>
+                    <div class="option-list">
+                        <button class="option-btn active" data-size="4">4×4</button>
+                        <button class="option-btn" data-size="5">5×5</button>
+                    </div>
+                </div>
+                
+                <div class="option-group">
+                    <h3 class="option-title"><i class="fas fa-tachometer-alt"></i> مستوى الصعوبة</h3>
+                    <div class="option-list">
+                        <button class="option-btn active" data-difficulty="easy">سهل</button>
+                        <button class="option-btn" data-difficulty="medium">متوسط</button>
+                        <button class="option-btn" data-difficulty="hard">صعب</button>
+                    </div>
+                </div>
+                
+                <div class="option-group">
+                    <h3 class="option-title"><i class="fas fa-tags"></i> فئة الكلمات</h3>
+                    <div class="option-list">
+                        <button class="option-btn active" data-category="religious">دينية</button>
+                        <button class="option-btn" data-category="cultural">ثقافية</button>
+                        <button class="option-btn" data-category="general">عامة</button>
+                        <button class="option-btn" data-category="genius">عباقرة</button>
+                    </div>
+                </div>
+                
+                <div class="option-group">
+                    <h3 class="option-title"><i class="fas fa-clock"></i> الوقت</h3>
+                    <div class="option-list">
+                        <button class="option-btn" data-time="30">30 ثانية</button>
+                        <button class="option-btn active" data-time="60">60 ثانية</button>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn btn-primary" id="startGameBtn">
+                <i class="fas fa-play-circle"></i> ابدأ الجولة
+            </button>
+        </header>
+        
+        <!-- شاشة اللعبة -->
+        <div class="game-container" id="gameScreen">
+            <div class="game-header">
+                <div class="timer" id="timer">60</div>
+                <div class="category-info">
+                    <div class="category-title" id="categoryTitle">دينية</div>
+                    <div class="category-description" id="categoryDescription">أسماء أنبياء</div>
+                </div>
+                <div class="score">الجولة: <span id="roundCount">1</span></div>
+            </div>
+            
+            <div class="word-display" id="wordDisplay"></div>
+            
+            <div class="game-grid" id="gameGrid">
+                <!-- سيتم إنشاء الشبكة هنا بواسطة JavaScript -->
+            </div>
+            
+            <div class="hint-section">
+                <div class="hint-text">
+                    <i class="fas fa-lightbulb"></i> لديك تلميح واحد متاح
+                </div>
+                <button class="hint-btn" id="hintBtn">
+                    <i class="fas fa-question-circle"></i> استخدام التلميح
+                </button>
+            </div>
+            
+            <div class="controls">
+                <button class="btn btn-secondary" id="shuffleBtn">
+                    <i class="fas fa-random"></i> إعادة ترتيب
+                </button>
+                <button class="btn btn-danger" id="clearBtn">
+                    <i class="fas fa-backspace"></i> مسح الكلمة
+                </button>
+                <button class="btn btn-success" id="submitBtn">
+                    <i class="fas fa-check-circle"></i> تأكيد الإجابة
+                </button>
+            </div>
+        </div>
+        
+        <!-- شاشة النتيجة -->
+        <div class="result-screen" id="resultScreen">
+            <div class="result-icon" id="resultIcon"></div>
+            <h2 class="result-title" id="resultTitle"></h2>
+            <p class="result-message" id="resultMessage"></p>
+            <p class="result-message">الكلمة الصحيحة: <strong id="correctWord"></strong></p>
+            <div class="controls">
+                <button class="btn btn-secondary" id="nextRoundBtn">
+                    <i class="fas fa-redo"></i> الجولة التالية
+                </button>
+                <button class="btn btn-primary" id="restartGameBtn">
+                    <i class="fas fa-home"></i> العودة للبداية
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // بيانات اللعبة
+        const gameData = {
+            gridSize: 4,
+            difficulty: 'easy',
+            category: 'religious',
+            timeLimit: 60,
+            score: 0,
+            round: 1,
+            totalRounds: 5,
+            selectedCells: [],
+            currentWord: '',
+            hintUsed: false,
+            timerInterval: null,
+            timeLeft: 60,
+            gameActive: false
+        };
+
+        // قاعدة بيانات الكلمات حسب الفئات
+        const wordsDatabase = {
+            religious: {
+                name: "دينية",
+                subcategories: {
+                    prophets: {
+                        name: "أسماء أنبياء",
+                        words: ["محمد", "إبراهيم", "موسى", "عيسى", "نوح", "آدم", "يوسف", "داوود", "سليمان", "يونس", "أيوب", "هود", "صالح", "لوط", "إدريس"]
+                    },
+                    quranic: {
+                        name: "كلمات من القرآن",
+                        words: ["الرحمن", "الرحيم", "الفاتحة", "البقرة", "الأنعام", "الكوثر", "القدر", "الفلق", "الناس", "الإخلاص", "الضحى", "العلق", "القدر", "البلد", "الشمس"]
+                    },
+                    companions: {
+                        name: "أسماء صحابة",
+                        words: ["أبو بكر", "عمر", "عثمان", "علي", "بلال", "سعد", "زيد", "حمزة", "خالد", "معاوية", "عمرو", "عمار", "سلمان", "أبو هريرة", "عبدالله"]
+                    }
+                }
+            },
+            cultural: {
+                name: "ثقافية",
+                subcategories: {
+                    countries: {
+                        name: "دول",
+                        words: ["مصر", "السعودية", "الإمارات", "الكويت", "قطر", "عمان", "اليمن", "الأردن", "لبنان", "سوريا", "العراق", "المغرب", "الجزائر", "تونس", "ليبيا"]
+                    },
+                    cities: {
+                        name: "مدن",
+                        words: ["القاهرة", "الرياض", "جدة", "دبي", "الكويت", "الدوحة", "مسقط", "صنعاء", "عمان", "بيروت", "دمشق", "بغداد", "الدار البيضاء", "الجزائر", "تونس"]
+                    }
+                }
+            },
+            general: {
+                name: "عامة",
+                subcategories: {
+                    foods: {
+                        name: "أكلات",
+                        words: ["كشري", "فتة", "مقلوبة", "منسف", "هريس", "شاورما", "فلافل", "حمص", "تبولة", "كبة", "سمك", "دجاج", "لحم", "أرز", "خبز"]
+                    },
+                    things: {
+                        name: "أشياء",
+                        words: ["كتاب", "قلم", "سيارة", "منزل", "شجرة", "زهرة", "بحر", "جبل", "شمس", "قمر", "نجمة", "سحابة", "مطر", "هاتف", "حاسوب"]
+                    }
+                }
+            },
+            genius: {
+                name: "عباقرة",
+                subcategories: {
+                    rare: {
+                        name: "كلمات نادرة",
+                        words: ["تلفاز", "هندسة", "فلسفة", "رياضيات", "كيمياء", "فيزياء", "فلك", "جيولوجيا", "أركيولوجيا", "أنثروبولوجيا", "سيكولوجيا", "بيولوجيا", "ميتافيزيقيا", "إبستمولوجيا", "فينومينولوجيا"]
+                    }
+                }
+            }
+        };
+
+        // الحروف العربية مع تكرار متوازن
+        const arabicLetters = {
+            common: ['ا', 'ب', 'ت', 'د', 'ر', 'س', 'م', 'ن', 'ل', 'ك', 'ي', 'و', 'ه', 'ع', 'ف', 'ص'],
+            medium: ['ج', 'ح', 'خ', 'ش', 'ق', 'ذ', 'ط', 'ز', 'ض', 'ظ', 'ث', 'غ'],
+            rare: ['ء', 'ئ', 'ى', 'ة', 'ؤ']
+        };
+
+        // عناصر DOM
+        const startScreen = document.getElementById('startScreen');
+        const gameScreen = document.getElementById('gameScreen');
+        const resultScreen = document.getElementById('resultScreen');
+        const gameGrid = document.getElementById('gameGrid');
+        const wordDisplay = document.getElementById('wordDisplay');
+        const timerElement = document.getElementById('timer');
+        const categoryTitle = document.getElementById('categoryTitle');
+        const categoryDescription = document.getElementById('categoryDescription');
+        const roundCount = document.getElementById('roundCount');
+        const resultIcon = document.getElementById('resultIcon');
+        const resultTitle = document.getElementById('resultTitle');
+        const resultMessage = document.getElementById('resultMessage');
+        const correctWordElement = document.getElementById('correctWord');
+        
+        // الأزرار
+        const startGameBtn = document.getElementById('startGameBtn');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const hintBtn = document.getElementById('hintBtn');
+        const nextRoundBtn = document.getElementById('nextRoundBtn');
+        const restartGameBtn = document.getElementById('restartGameBtn');
+        const nightModeBtn = document.getElementById('nightModeBtn');
+        const loader = document.getElementById('loader');
+        
+        // تحديد الخيارات
+        const sizeButtons = document.querySelectorAll('[data-size]');
+        const difficultyButtons = document.querySelectorAll('[data-difficulty]');
+        const categoryButtons = document.querySelectorAll('[data-category]');
+        const timeButtons = document.querySelectorAll('[data-time]');
+
+        // تهيئة اللعبة
+        function initGame() {
+            setupEventListeners();
+            resetGameState();
+        }
+
+        // إعداد مستمعي الأحداث
+        function setupEventListeners() {
+            // أزرار الخيارات
+            sizeButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    sizeButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    gameData.gridSize = parseInt(btn.dataset.size);
+                });
+            });
+            
+            difficultyButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    difficultyButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    gameData.difficulty = btn.dataset.difficulty;
+                });
+            });
+            
+            categoryButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    categoryButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    gameData.category = btn.dataset.category;
+                });
+            });
+            
+            timeButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    timeButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    gameData.timeLimit = parseInt(btn.dataset.time);
+                });
+            });
+            
+            // زر بدء اللعبة
+            startGameBtn.addEventListener('click', startGame);
+            
+            // أزرار اللعبة
+            shuffleBtn.addEventListener('click', shuffleGrid);
+            clearBtn.addEventListener('click', clearSelection);
+            submitBtn.addEventListener('click', submitWord);
+            hintBtn.addEventListener('click', useHint);
+            
+            // أزرار النتائج
+            nextRoundBtn.addEventListener('click', nextRound);
+            restartGameBtn.addEventListener('click', restartGame);
+            
+            // زر الوضع الليلي
+            nightModeBtn.addEventListener('click', toggleNightMode);
+        }
+
+        // بدء اللعبة
+        function startGame() {
+            showLoader();
+            
+            setTimeout(() => {
+                resetGameState();
+                generateGrid();
+                setupRound();
+                
+                startScreen.style.display = 'none';
+                gameScreen.style.display = 'block';
+                resultScreen.style.display = 'none';
+                
+                hideLoader();
+            }, 800);
+        }
+
+        // إعادة تعيين حالة اللعبة
+        function resetGameState() {
+            gameData.selectedCells = [];
+            gameData.currentWord = '';
+            gameData.hintUsed = false;
+            gameData.timeLeft = gameData.timeLimit;
+            gameData.gameActive = true;
+            gameData.round = 1;
+            
+            // إعادة تمكين زر التلميح
+            hintBtn.classList.remove('disabled');
+            hintBtn.disabled = false;
+            
+            // تحديث العرض
+            wordDisplay.textContent = '';
+            timerElement.textContent = gameData.timeLeft;
+            roundCount.textContent = gameData.round;
+            
+            // إيقاف أي مؤقت سابق
+            if (gameData.timerInterval) {
+                clearInterval(gameData.timerInterval);
+            }
+        }
+
+        // توليد شبكة الحروف
+        function generateGrid() {
+            gameGrid.innerHTML = '';
+            gameGrid.style.gridTemplateColumns = `repeat(${gameData.gridSize}, 1fr)`;
+            
+            let letters = [];
+            const gridCells = gameData.gridSize * gameData.gridSize;
+            
+            // اختيار الحروف بناءً على مستوى الصعوبة
+            let letterPool = [...arabicLetters.common];
+            
+            if (gameData.difficulty === 'medium') {
+                letterPool = [...arabicLetters.common, ...arabicLetters.medium];
+            } else if (gameData.difficulty === 'hard') {
+                letterPool = [...arabicLetters.common, ...arabicLetters.medium, ...arabicLetters.rare];
+            }
+            
+            // إضافة بعض الحروف المتكررة لزيادة فرص تكوين الكلمات
+            for (let i = 0; i < gridCells; i++) {
+                const randomIndex = Math.floor(Math.random() * letterPool.length);
+                letters.push(letterPool[randomIndex]);
+            }
+            
+            // إنشاء الخلايا في الشبكة
+            letters.forEach((letter, index) => {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.textContent = letter;
+                cell.dataset.index = index;
+                
+                cell.addEventListener('click', () => selectCell(cell, index));
+                
+                gameGrid.appendChild(cell);
+            });
+        }
+
+        // إعداد الجولة
+        function setupRound() {
+            // اختيار فئة فرعية عشوائية
+            const categoryData = wordsDatabase[gameData.category];
+            const subcategories = Object.keys(categoryData.subcategories);
+            const randomSubcategory = subcategories[Math.floor(Math.random() * subcategories.length)];
+            const subcategoryData = categoryData.subcategories[randomSubcategory];
+            
+            // تحديث معلومات الفئة
+            categoryTitle.textContent = categoryData.name;
+            categoryDescription.textContent = subcategoryData.name;
+            
+            // تخزين الكلمات المتاحة لهذه الجولة
+            gameData.availableWords = [...subcategoryData.words];
+            gameData.currentSubcategory = randomSubcategory;
+            
+            // بدء المؤقت
+            startTimer();
+        }
+
+        // بدء المؤقت
+        function startTimer() {
+            gameData.timeLeft = gameData.timeLimit;
+            timerElement.textContent = gameData.timeLeft;
+            
+            gameData.timerInterval = setInterval(() => {
+                gameData.timeLeft--;
+                timerElement.textContent = gameData.timeLeft;
+                
+                if (gameData.timeLeft <= 10) {
+                    timerElement.style.color = '#ff6b6b';
+                    timerElement.classList.add('shake');
+                    
+                    // تشغيل صوت تنبيه إذا كان الوقت منخفضًا
+                    if (gameData.timeLeft <= 5) {
+                        playSound('tick');
+                    }
+                } else {
+                    timerElement.style.color = '';
+                    timerElement.classList.remove('shake');
+                }
+                
+                if (gameData.timeLeft <= 0) {
+                    endGame(false);
+                }
+            }, 1000);
+        }
+
+        // اختيار خلية
+        function selectCell(cell, index) {
+            if (!gameData.gameActive) return;
+            
+            // إذا كانت الخلية محجوزة بالفعل، إلغاء التحديد
+            if (gameData.selectedCells.includes(index)) {
+                // إلغاء التحديد إذا كانت الخلية الأخيرة
+                if (gameData.selectedCells[gameData.selectedCells.length - 1] === index) {
+                    gameData.selectedCells.pop();
+                    cell.classList.remove('selected');
+                    updateWordDisplay();
+                    return;
+                }
+                return;
+            }
+            
+            // إضافة الخلية إلى المحدد
+            gameData.selectedCells.push(index);
+            cell.classList.add('selected');
+            
+            // تحديث عرض الكلمة
+            updateWordDisplay();
+            
+            // تشغيل صوت النقر
+            playSound('click');
+        }
+
+        // تحديث عرض الكلمة
+        function updateWordDisplay() {
+            gameData.currentWord = '';
+            
+            gameData.selectedCells.forEach(index => {
+                const cell = document.querySelector(`.cell[data-index="${index}"]`);
+                if (cell) {
+                    gameData.currentWord += cell.textContent;
+                }
+            });
+            
+            wordDisplay.textContent = gameData.currentWord;
+        }
+
+        // خلط الحروف
+        function shuffleGrid() {
+            if (!gameData.gameActive) return;
+            
+            // جمع جميع الحروف
+            const cells = document.querySelectorAll('.cell');
+            const letters = Array.from(cells).map(cell => cell.textContent);
+            
+            // خلط الحروف
+            for (let i = letters.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [letters[i], letters[j]] = [letters[j], letters[i]];
+            }
+            
+            // تحديث الخلايا بالحروف الجديدة
+            cells.forEach((cell, index) => {
+                cell.textContent = letters[index];
+            });
+            
+            // تشغيل صوت الخلط
+            playSound('shuffle');
+            
+            // عرض إشعار
+            showNotification('تمت إعادة ترتيب الحروف بنجاح', 'info');
+        }
+
+        // مسح الكلمة المحددة
+        function clearSelection() {
+            if (!gameData.gameActive) return;
+            
+            // إزالة التحديد من جميع الخلايا
+            gameData.selectedCells.forEach(index => {
+                const cell = document.querySelector(`.cell[data-index="${index}"]`);
+                if (cell) {
+                    cell.classList.remove('selected');
+                }
+            });
+            
+            // إعادة تعيين البيانات
+            gameData.selectedCells = [];
+            gameData.currentWord = '';
+            wordDisplay.textContent = '';
+            
+            // تشغيل صوت المسح
+            playSound('clear');
+        }
+
+        // استخدام التلميح
+        function useHint() {
+            if (!gameData.gameActive || gameData.hintUsed) return;
+            
+            // تعطيل زر التلميح بعد استخدامه
+            gameData.hintUsed = true;
+            hintBtn.classList.add('disabled');
+            hintBtn.disabled = true;
+            
+            // اختيار كلمة عشوائية من القائمة المتاحة
+            const randomWord = gameData.availableWords[Math.floor(Math.random() * gameData.availableWords.length)];
+            
+            // عرض أول حرفين من الكلمة كتلميح
+            const hint = randomWord.substring(0, 2);
+            
+            // عرض التلميح
+            showNotification(`التلميح: الكلمة تبدأ بـ "${hint}"`, 'info');
+            
+            // تشغيل صوت التلميح
+            playSound('hint');
+        }
+
+        // تقديم الكلمة للتحقق
+        function submitWord() {
+            if (!gameData.gameActive || gameData.currentWord.length < 2) {
+                showNotification('يرجى اختيار كلمة من حرفين على الأقل', 'error');
+                playSound('error');
+                return;
+            }
+            
+            // التحقق من صحة الكلمة
+            const isValid = validateWord(gameData.currentWord);
+            
+            if (isValid) {
+                // نجاح - إيجاد كلمة صحيحة
+                endGame(true);
+                playSound('success');
+            } else {
+                // فشل - كلمة غير صحيحة
+                showNotification('الكلمة غير صحيحة، حاول مرة أخرى', 'error');
+                playSound('error');
+                
+                // تأثير اهتزاز
+                wordDisplay.classList.add('shake');
+                setTimeout(() => wordDisplay.classList.remove('shake'), 500);
+            }
+        }
+
+        // التحقق من صحة الكلمة
+        function validateWord(word) {
+            // التحقق من وجود الكلمة في القائمة المتاحة
+            return gameData.availableWords.some(availableWord => 
+                availableWord.toLowerCase() === word.toLowerCase()
+            );
+        }
+
+        // إنهاء اللعبة (فوز أو خسارة)
+        function endGame(isWin) {
+            // تعطيل اللعبة
+            gameData.gameActive = false;
+            
+            // إيقاف المؤقت
+            clearInterval(gameData.timerInterval);
+            
+            // إيجاد الكلمة الصحيحة إذا لم يكن هناك فوز
+            let correctWord = '';
+            if (!isWin && gameData.availableWords && gameData.availableWords.length > 0) {
+                correctWord = gameData.availableWords[0];
+            } else if (isWin) {
+                correctWord = gameData.currentWord;
+            }
+            
+            // عرض شاشة النتيجة
+            showResultScreen(isWin, correctWord);
+            
+            // تشغيل الصوت المناسب
+            if (isWin) {
+                playSound('win');
+            } else {
+                playSound('lose');
+            }
+        }
+
+        // عرض شاشة النتيجة
+        function showResultScreen(isWin, correctWord) {
+            gameScreen.style.display = 'none';
+            resultScreen.style.display = 'block';
+            
+            if (isWin) {
+                resultIcon.innerHTML = '<i class="fas fa-trophy"></i>';
+                resultTitle.textContent = 'تهانينا! فزت';
+                resultMessage.textContent = `لقد وجدت الكلمة الصحيحة خلال ${gameData.timeLimit - gameData.timeLeft} ثانية`;
+                resultScreen.classList.add('win-effect');
+            } else {
+                resultIcon.innerHTML = '<i class="fas fa-clock"></i>';
+                resultTitle.textContent = 'انتهى الوقت';
+                resultMessage.textContent = 'حاول مرة أخرى في الجولة القادمة';
+                resultScreen.classList.remove('win-effect');
+            }
+            
+            correctWordElement.textContent = correctWord || 'لا توجد كلمة متاحة';
+        }
+
+        // الانتقال للجولة التالية
+        function nextRound() {
+            gameData.round++;
+            
+            if (gameData.round > gameData.totalRounds) {
+                // نهاية اللعبة بعد كل الجولات
+                showNotification(`انتهت اللعبة! لقد أكملت ${gameData.totalRounds} جولات`, 'info');
+                restartGame();
+                return;
+            }
+            
+            // إعادة تعيين حالة الجولة
+            resetRoundState();
+            
+            // الانتقال لشاشة اللعبة
+            gameScreen.style.display = 'block';
+            resultScreen.style.display = 'none';
+        }
+
+        // إعادة تعيين حالة الجولة
+        function resetRoundState() {
+            gameData.selectedCells = [];
+            gameData.currentWord = '';
+            gameData.hintUsed = false;
+            gameData.timeLeft = gameData.timeLimit;
+            gameData.gameActive = true;
+            
+            // تحديث عرض الجولة
+            roundCount.textContent = gameData.round;
+            
+            // إعادة تمكين زر التلميح
+            hintBtn.classList.remove('disabled');
+            hintBtn.disabled = false;
+            
+            // تحديث العرض
+            wordDisplay.textContent = '';
+            timerElement.textContent = gameData.timeLeft;
+            timerElement.style.color = '';
+            
+            // إزالة التحديد من جميع الخلايا
+            document.querySelectorAll('.cell').forEach(cell => {
+                cell.classList.remove('selected');
+            });
+            
+            // إعداد جولة جديدة
+            setupRound();
+        }
+
+        // إعادة تشغيل اللعبة
+        function restartGame() {
+            startScreen.style.display = 'block';
+            gameScreen.style.display = 'none';
+            resultScreen.style.display = 'none';
+            
+            resultScreen.classList.remove('win-effect');
+        }
+
+        // عرض التحميل
+        function showLoader() {
+            loader.classList.add('active');
+        }
+
+        // إخفاء التحميل
+        function hideLoader() {
+            loader.classList.remove('active');
+        }
+
+        // عرض إشعار
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // تشغيل الصوت
+        function playSound(soundType) {
+            // في تطبيق حقيقي، يمكن إضافة ملفات صوتية هنا
+            // نستخدم هنا أصوات افتراضية للمتصفح
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                let frequency = 440;
+                let duration = 0.1;
+                
+                switch(soundType) {
+                    case 'click':
+                        frequency = 523.25; // C5
+                        break;
+                    case 'success':
+                        frequency = 659.25; // E5
+                        break;
+                    case 'error':
+                        frequency = 220; // A3
+                        break;
+                    case 'shuffle':
+                        frequency = 392; // G4
+                        break;
+                    case 'clear':
+                        frequency = 349.23; // F4
+                        break;
+                    case 'hint':
+                        frequency = 493.88; // B4
+                        break;
+                    case 'tick':
+                        frequency = 277.18; // C#4
+                        duration = 0.05;
+                        break;
+                    case 'win':
+                        // نغمة انتصار بسيطة
+                        playWinSound();
+                        return;
+                    case 'lose':
+                        frequency = 174.61; // F3
+                        duration = 0.3;
+                        break;
+                }
+                
+                oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+                
+                oscillator.start();
+                oscillator.stop(audioContext.currentTime + duration);
+            } catch (e) {
+                console.log('تعذر تشغيل الصوت:', e);
+            }
+        }
+
+        // تشغيل نغمة الفوز
+        function playWinSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+                let time = audioContext.currentTime;
+                
+                notes.forEach((freq, index) => {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(freq, time);
+                    gainNode.gain.setValueAtTime(0, time);
+                    gainNode.gain.linearRampToValueAtTime(0.1, time + 0.1);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, time + 0.3);
+                    
+                    oscillator.start(time);
+                    oscillator.stop(time + 0.3);
+                    
+                    time += 0.15;
+                });
+            } catch (e) {
+                console.log('تعذر تشغيل نغمة الفوز:', e);
+            }
+        }
+
+        // تبديل الوضع الليلي
+        function toggleNightMode() {
+            document.body.classList.toggle('night-mode-active');
+            
+            const icon = nightModeBtn.querySelector('i');
+            if (document.body.classList.contains('night-mode-active')) {
+                icon.className = 'fas fa-sun';
+                showNotification('تم تفعيل الوضع الليلي الرمضاني', 'info');
+            } else {
+                icon.className = 'fas fa-moon';
+                showNotification('تم إيقاف الوضع الليلي', 'info');
+            }
+        }
+
+        // بدء اللعبة عند تحميل الصفحة
+        window.addEventListener('DOMContentLoaded', initGame);
+    </script>
+</body>
+</html>
